@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Catálogo de Tabelas</title>
+    <link rel="stylesheet" href="/static/style.css"> <!-- Ajuste o caminho conforme seu projeto -->
+</head>
+<body>
+    <h1>Catálogo de Tabelas</h1>
+
+    {% for tabela in tabelas %}
+        <div class="tabela-box">
+            <h2>Tabela: {{ tabela.nome_tabela }}</h2>
+
+            <div class="steward-info">
+                <img class="steward-avatar" 
+                src="{{ tabela.data_steward.avatar_url if tabela.data_steward.avatar_url else '/static/default-avatar.png' }}" 
+                alt="Avatar de {{ tabela.data_steward.nome }}">
+                <p><strong>Steward:</strong> {{ tabela.data_steward.nome }}<br>
+                <strong>Email:</strong> {{ tabela.data_steward.email }}</p>
+            </div>
+
+            <div class="colunas">
+                <h3>Colunas:</h3>
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+            <tr>
+                <th><strong>Nome da Coluna</strong></th>
+                <th><strong>Tipo de Dado</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for coluna in tabela.colunas %}
+                <tr>
+                    <td>{{ coluna.nome_coluna }}</td>
+                    <td>{{ coluna.tipo_dado }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+            </div>
+
+            <div class="solicitacao-box">
+                {% if tabela.status_solicitacao == "pendente" %}
+                    <p style="color: orange;"><strong>Status:</strong> Aguardando aprovação</p>
+                {% elif tabela.status_solicitacao == "aprovado" %}
+                    <p style="color: green;"><strong>Status:</strong> Acesso concedido</p>
+                {% else %}
+                    <form action="/solicitar-acesso/{{ tabela.id }}" method="post">
+                        <button type="submit">Solicitar Acesso</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>
+
+

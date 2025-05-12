@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aprovações Pendentes</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Solicitações de Acesso</h1>
+    {% for s in solicitacoes %}
+        <div style="border: 1px solid gray; margin: 10px; padding: 10px;">
+            <p><strong>{{ s.solicitante.nome }}</strong> solicitou acesso à tabela <strong>{{ s.tabela.nome_tabela }}</strong></p>
+            <form method="post" action="/solicitacoes/aprovar/{{ s.id }}">
+                <input type="hidden" name="acao" value="aprovar">
+                <button type="submit">Aprovar</button>
+            </form>
+            <form method="post" action="/solicitacoes/aprovar/{{ s.id }}">
+                <input type="hidden" name="acao" value="rejeitar">
+                <button type="submit">Rejeitar</button>
+            </form>
+        </div>
+    {% else %}
+        <p>Não há solicitações pendentes.</p>
+    {% endfor %}
+</body>
+</html>
