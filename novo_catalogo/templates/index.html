@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Tabelas</title>
+    <link rel="stylesheet" href="/static/style.css"> <!-- Corrija o caminho se necessário -->
+</head>
+<body class="catalogo-page">
+    <img src="/static/brasilprev-logo.png" alt="Logo Brasilprev" class="logo-topo">
+    <div class="catalogo-container">
+        <h1>Catálogo de Tabelas</h1>
+
+        {% for tabela in tabelas %}
+            <div class="tabela-box">
+                <h2>Tabela: {{ tabela.nome_tabela }}</h2>
+
+                {% if tabela.descricao %}
+                <p class="descricao-tabela">{{ tabela.descricao }}</p>
+                {% else %}
+                <p class="descricao-tabela"><em>Sem descrição disponível.</em></p>
+                {% endif %}
+
+                <div class="steward-info">
+                    <img class="steward-avatar" 
+                         src="{{ tabela.data_steward.avatar_url if tabela.data_steward.avatar_url else '/static/default-avatar.png' }}" 
+                         alt="Avatar de {{ tabela.data_steward.nome }}">
+                    <p>
+                        <strong>Steward:</strong> {{ tabela.data_steward.nome }}<br>
+                        <strong>Email:</strong> {{ tabela.data_steward.email }}
+                    </p>
+                </div>
+
+                <div class="colunas">
+                    <h3>Colunas:</h3>
+                    {% if tabela.colunas %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome da Coluna</th>
+                                    <th>Tipo de Dado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for coluna in tabela.colunas %}
+                                    <tr>
+                                        <td>{{ coluna.nome_coluna }}</td>
+                                        <td>{{ coluna.tipo_dado }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p><em>Sem colunas registradas para esta tabela.</em></p>
+                    {% endif %}
+                </div>
+
+                    <div class="solicitacao-box">
+                        {% if tabela.status_solicitacao == "pendente" %}
+                            <p style="color: orange;"><strong>Status:</strong> Aguardando aprovação</p>
+                        {% elif tabela.status_solicitacao == "aprovado" %}
+                            <p style="color: green;"><strong>Status:</strong> Acesso concedido</p>
+                        {% elif tabela.status_solicitacao == "rejeitado" %}
+                            <p style="color: red; font-weight: bold;"><strong>Status:</strong> Solicitação recusada</p>
+                        {% else %}
+                            <form action="catalogo/solicitar-acesso/{{ tabela.id }}" method="post">
+                                <button type="submit">Solicitar Acesso</button>
+                            </form>
+                        {% endif %}
+                    </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
