@@ -22,8 +22,8 @@
 
                 <div class="steward-info">
                     <img class="steward-avatar" 
-                         src="{{ tabela.data_steward.avatar_url if tabela.data_steward.avatar_url else '/static/default-avatar.png' }}" 
-                         alt="Avatar de {{ tabela.data_steward.nome }}">
+                        src="{{ '/static/' ~ tabela.data_steward.foto_url if tabela.data_steward.foto_url else '/static/seya.png' }}" 
+                        alt="Avatar de {{ tabela.data_steward.nome }}">
                     <p>
                         <strong>Steward:</strong> {{ tabela.data_steward.nome }}<br>
                         <strong>Email:</strong> {{ tabela.data_steward.email }}

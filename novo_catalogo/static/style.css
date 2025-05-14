@@ -95,6 +95,15 @@ img.steward-avatar {
     margin-bottom: 10px;
 }
 
+/* Avatar de solicitante */
+img.solicitante-avatar {
+    width: 100px;
+    height: 100px;
+    /*object-fit: cover;*/
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
 /* Bloco da tabela */
 .tabela-box {
     background: white;

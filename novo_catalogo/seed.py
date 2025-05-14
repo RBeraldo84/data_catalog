@@ -69,15 +69,15 @@ from app.database import SessionLocal
 db = SessionLocal()
 
 # Cria a tabela rh_info no catálogo
-nova_tabela = Tabela(nome_tabela="rh_info", data_steward_id=1)
+nova_tabela = Tabela(nome_tabela="pesquisas_nps", data_steward_id=7)
 db.add(nova_tabela)
 db.flush()  # para obter o ID da nova tabela
 
 # Cria as colunas
 colunas = [
     Coluna(nome_coluna="id", tipo_dado="INTEGER", tabela_id=nova_tabela.id),
-    Coluna(nome_coluna="employee_name", tipo_dado="VARCHAR(50)", tabela_id=nova_tabela.id),
-    Coluna(nome_coluna="employee_document", tipo_dado="VARCHAR(14)", tabela_id=nova_tabela.id)
+    Coluna(nome_coluna="survey_name", tipo_dado="VARCHAR(50)", tabela_id=nova_tabela.id),
+    Coluna(nome_coluna="survey_date", tipo_dado="DATE", tabela_id=nova_tabela.id)
 ]
 
 db.add_all(colunas)

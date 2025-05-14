@@ -1,26 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Aprovações Pendentes</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-    <h1>Solicitações de Acesso</h1>
-    {% for s in solicitacoes %}
-        <div style="border: 1px solid gray; margin: 10px; padding: 10px;">
-            <p><strong>{{ s.solicitante.nome }}</strong> solicitou acesso à tabela <strong>{{ s.tabela.nome_tabela }}</strong></p>
-            <form method="post" action="/solicitacoes/aprovar/{{ s.id }}">
-                <input type="hidden" name="acao" value="aprovar">
-                <button type="submit">Aprovar</button>
-            </form>
-            <form method="post" action="/solicitacoes/aprovar/{{ s.id }}">
-                <input type="hidden" name="acao" value="rejeitar">
-                <button type="submit">Rejeitar</button>
-            </form>
-        </div>
-    {% else %}
-        <p>Não há solicitações pendentes.</p>
-    {% endfor %}
+<body class="catalogo-page">
+    <header>
+        <img src="/static/brasilprev-logo.png" alt="Logo Brasilprev" class="logo-topo">
+    </header>
+
+    <div class="catalogo-container">
+        <h1>Solicitações de Acesso</h1>
+
+        {% for s in solicitacoes %}
+            <div class="solicitacao-box">
+                <h2><strong>{{ s.solicitante.nome }}</strong> solicitou acesso à tabela <strong>{{ s.tabela.nome_tabela }}</strong></h2>
+
+                <div class="solicitante-info">
+                    <img class="solicitante-avatar" 
+                         src="{{ '/static/' ~ s.solicitante.foto_url if s.solicitante.foto_url else '/static/seya.png' }}" 
+                         alt="Avatar de {{ s.solicitante.nome }}">
+                    <p>
+                        <strong>Email:</strong> {{ s.solicitante.email }}
+                    </p>
+                </div>
+
+                <div class="colunas">
+                    <h3>Colunas:</h3>
+                    {% if s.tabela.colunas %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome da Coluna</th>
+                                    <th>Tipo de Dado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for coluna in s.tabela.colunas %}
+                                    <tr>
+                                        <td>{{ coluna.nome_coluna }}</td>
+                                        <td>{{ coluna.tipo_dado }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p><em>Sem colunas registradas para esta tabela.</em></p>
+                    {% endif %}
+                </div>
+
+                <div class="acoes">
+                    <form method="post" action="/solicitacoes/aprovar/{{ s.id }}">
+                        <input type="hidden" name="acao" value="aprovar">
+                        <button type="submit" class="btn btn-aprovar">Aprovar</button>
+                    </form>
+                    <form method="post" action="/solicitacoes/aprovar/{{ s.id }}">
+                        <input type="hidden" name="acao" value="rejeitar">
+                        <button type="submit" class="btn btn-rejeitar">Rejeitar</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p>Não há solicitações pendentes.</p>
+        {% endfor %}
+    </div>
 </body>
 </html>
+
