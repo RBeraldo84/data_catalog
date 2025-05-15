@@ -10,8 +10,13 @@
     <div class="catalogo-container">
         <h1>Catálogo de Tabelas</h1>
 
+        <div class="filtros-container">
+            <input type="text" id="filtro-nome" placeholder="Filtrar por nome da tabela">
+            <input type="text" id="filtro-steward" placeholder="Filtrar por steward">
+        </div>
+
         {% for tabela in tabelas %}
-            <div class="tabela-box">
+            <div class="tabela-box" data-nome="{{ tabela.nome_tabela }}">
                 <h2>Tabela: {{ tabela.nome_tabela }}</h2>
 
                 {% if tabela.descricao %}
@@ -70,6 +75,43 @@
             </div>
         {% endfor %}
     </div>
+<script>
+    const filtroNome = document.getElementById('filtro-nome');
+    const filtroSteward = document.getElementById('filtro-steward');
+    const tabelasBox = document.querySelectorAll('.tabela-box');
+
+    function aplicarFiltros() {
+        const textoNome = filtroNome.value.trim().toLowerCase();
+        const textoSteward = filtroSteward.value.trim().toLowerCase();
+
+        tabelasBox.forEach(box => {
+            const nomeTabela = (box.getAttribute('data-nome') || '').toLowerCase();
+            const stewardTexto = box.querySelector('.steward-info')?.textContent.toLowerCase() || '';
+
+            const correspondeNome = textoNome === '' || nomeTabela.includes(textoNome);
+            const correspondeSteward = textoSteward === '' || stewardTexto.includes(textoSteward);
+
+            // Mostra ou oculta o .tabela-box com base no filtro
+            if (correspondeNome && correspondeSteward) {
+                box.style.display = '';
+            } else {
+                box.style.display = 'none';
+            }
+        });
+    }
+
+    // Aplica o filtro somente ao pressionar Enter
+    [filtroNome, filtroSteward].forEach(input => {
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                aplicarFiltros();
+            }
+        });
+    });
+</script>
+
+
 </body>
 </html>
 
